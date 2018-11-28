@@ -1,36 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using MVVM.Models;
-using System;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace MVVM.ViewModels
 {
     public class ViewModel_MainPage : ViewModelBase
     {
-        #region vars
-        Random _r = new Random(DateTime.Now.Second);
-        #endregion
-
         #region properties
-        // used to show a collection of Person in a ListView
-        public ObservableCollection<Model_Person> PersonCollection { get; set; } = new ObservableCollection<Model_Person>();
-
-        // holds the data of the selected Person in a ListView
-        private Model_Person _selectedPerson = new Model_Person();
-        public Model_Person SelectedPerson
+        // we need the instance of this ViewModel so we can
+        // call some of its functions inside thes ViewModel
+        ViewModel_PersonManagement Person
         {
-            get { return _selectedPerson; }
-            set { Set(nameof(SelectedPerson), ref _selectedPerson, value); }
-        }
-
-        // holds the data entered in Entry control
-        private Model_Person _personEntry = new Model_Person();
-        public Model_Person PersonEntry
-        {
-            get { return _personEntry; }
-            set { Set(nameof(PersonEntry), ref _personEntry, value); }
+            get { return SimpleIoc.Default.GetInstance<ViewModel_PersonManagement>(); }
         }
 
         // show / hides the view for adding a Person
@@ -54,7 +37,6 @@ namespace MVVM.ViewModels
         public ViewModel_MainPage()
         {
             InitCommands();
-            DesignData();
         }
         #endregion
 
@@ -75,17 +57,7 @@ namespace MVVM.ViewModels
         #region command methods
         void Command_Save_Click()
         {
-            // create a new instance of Model_Person in our collection
-            PersonCollection.Add(new Model_Person()
-            {
-                FirstName = PersonEntry.FirstName,
-                LastName = PersonEntry.LastName
-            });
-
-
-            // and clear the fields
-            PersonEntry.FirstName = null;
-            PersonEntry.LastName = null;
+            Person.SaveNewPerson();
 
             // then hide the view
             Command_CloseAddView.Execute(null);
@@ -103,7 +75,7 @@ namespace MVVM.ViewModels
 
         void Command_ShowPersonDetails_Click(Model_Person person)
         {
-            this.SelectedPerson = person;
+            Person.SelectedPerson = person;
             this.ShowViewDetailsPane = true;
         }
 
@@ -127,48 +99,7 @@ namespace MVVM.ViewModels
         // create an initial persons for our ListView
         void DesignData()
         {
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Koushuu",
-                LastName = "Matsusaki"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Katsuhiko",
-                LastName = "Miyake"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Taiga",
-                LastName = "Miwa"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Kiyosumi",
-                LastName = "Chouda"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Izumi",
-                LastName = "Kawano"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Yoshiaki",
-                LastName = "Kouyama"
-            });
-            this.PersonCollection.Add(new Model_Person()
-            {
-                ProfilePicture = $"https://randomuser.me/api/portraits/men/{_r.Next(1, 62)}.jpg",
-                FirstName = "Michinori",
-                LastName = "Aoyagi"
-            });
+            
         }
         #endregion
     }

@@ -7,11 +7,17 @@ namespace MVVM.ViewModels
         public ViewModelLocator()
         {
             SimpleIoc.Default.Register<ViewModel_MainPage>();
+            SimpleIoc.Default.Register<ViewModel_PersonManagement>();
         }
 
         public ViewModel_MainPage Main
         {
             get { return SimpleIoc.Default.GetInstance<ViewModel_MainPage>(); }
+        }
+
+        public ViewModel_PersonManagement Person
+        {
+            get { return SimpleIoc.Default.GetInstance<ViewModel_PersonManagement>(); }
         }
     }
 }
