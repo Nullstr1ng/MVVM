@@ -1,14 +1,119 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MVVM"
-             x:Class="MVVM.MainPage">
+             x:Class="MVVM.MainPage"
+             
+             xmlns:vm="clr-namespace:MVVM.ViewModels"
+             x:Name="thisPage"
+             >
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+    <!--set the BindingContext of this Page to ViewModel_MainPage-->
+    <ContentPage.BindingContext>
+        <vm:ViewModel_MainPage />
+    </ContentPage.BindingContext>
 
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <ListView ItemsSource="{Binding PersonCollection}" HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid Margin="10,4,10,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Source="{Binding ProfilePicture}" Grid.Column="0" BackgroundColor="Red" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" IsVisible="False" />
+
+                                        <StackLayout Grid.Column="1">
+                                            <Label Text="{Binding FirstName}" FontSize="20" FontAttributes="Bold" />
+                                            <Label Text="{Binding LastName}" />
+                                        </StackLayout>
+                                    </Grid>
+
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.Command_ShowPersonDetails, Source={Reference thisPage}}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Button Text="Add New Person" Command="{Binding Command_ShowAddView}" />
+            </Grid>
+        </Grid>
+
+        <!--view person popup-->
+        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowViewDetailsPane}">
+            <Grid BackgroundColor="Accent" HorizontalOptions="End" WidthRequest="300">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackLayout Margin="10" Grid.Row="0">
+                        <Label Text="{Binding SelectedPerson.FirstName}" FontSize="Large" TextColor="White" />
+                        <Label Text="{Binding SelectedPerson.LastName}" FontSize="Medium" TextColor="White" />
+                    </StackLayout>
+
+                    <Button Text="Close" Command="{Binding Command_CloseViewDetailsPane}" Grid.Row="1" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!--add person popup-->
+        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowAddView}">
+            <Grid VerticalOptions="Center" HorizontalOptions="FillAndExpand" BackgroundColor="Crimson">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label Text="First Name" Grid.Row="0" Grid.Column="0" TextColor="White" />
+                            <Label Text="Last Name" Grid.Row="1" Grid.Column="0" TextColor="White" />
+
+                            <Entry Text="{Binding PersonEntry.FirstName}" Grid.Row="0" Grid.Column="1" TextColor="White" />
+                            <Entry Text="{Binding PersonEntry.LastName}" Grid.Row="1" Grid.Column="1" TextColor="White" />
+
+                            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Text="Save" Grid.Column="0" Command="{Binding Command_Save}" />
+                                <Button Text="Close" Grid.Column="2" Command="{Binding Command_CloseAddView}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
 </ContentPage>

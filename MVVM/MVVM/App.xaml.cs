@@ -9,6 +9,8 @@ namespace MVVM
     {
         public App()
         {
+            LiveReload.Init();
+
             InitializeComponent();
 
             MainPage = new MainPage();
