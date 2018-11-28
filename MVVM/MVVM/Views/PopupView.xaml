@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MVVM.Views.PopupView"
+             
+             BindingContext="{Binding Source={StaticResource Locator}}"
+             >
+    
+    <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Popup.IsVisible}">
+        <Grid BackgroundColor="White" VerticalOptions="Center">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Label Text="{Binding Popup.Message, FallbackValue='...'}" FontSize="Medium" />
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Text="Ok" Command="{Binding Popup.Command_Ok}" />
+                    <Button Text="Cancel" Command="{Binding Popup.Command_Cancel}" Grid.Column="2"  />
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentView>

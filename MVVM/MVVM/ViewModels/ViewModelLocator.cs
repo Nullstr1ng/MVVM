@@ -8,6 +8,7 @@ namespace MVVM.ViewModels
         {
             SimpleIoc.Default.Register<ViewModel_MainPage>();
             SimpleIoc.Default.Register<ViewModel_PersonManagement>();
+            SimpleIoc.Default.Register<ViewModel_Popup>();
         }
 
         public ViewModel_MainPage Main
@@ -18,6 +19,11 @@ namespace MVVM.ViewModels
         public ViewModel_PersonManagement Person
         {
             get { return SimpleIoc.Default.GetInstance<ViewModel_PersonManagement>(); }
+        }
+
+        public ViewModel_Popup Popup
+        {
+            get { return SimpleIoc.Default.GetInstance<ViewModel_Popup>(); }
         }
     }
 }

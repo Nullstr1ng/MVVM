@@ -1,12 +1,11 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using MVVM.Models;
 using System.Windows.Input;
 
 namespace MVVM.ViewModels
 {
-    public class ViewModel_MainPage : ViewModelBase
+    public class ViewModel_MainPage : VMBase
     {
         #region properties
         // we need the instance of this ViewModel so we can
@@ -37,6 +36,18 @@ namespace MVVM.ViewModels
         public ViewModel_MainPage()
         {
             InitCommands();
+
+            // make a subscription to this event
+            Person.OnPersonDeleted += Person_OnPersonDeleted;
+        }
+        #endregion
+
+        #region event triggers
+        // just make sure to hide the details pane 
+        // if we deleted a person
+        private void Person_OnPersonDeleted(object sender, Model_Person e)
+        {
+            this.ShowViewDetailsPane = false;
         }
         #endregion
 
@@ -52,6 +63,7 @@ namespace MVVM.ViewModels
         public ICommand Command_ShowPersonDetails { get; set; }
 
         public ICommand Command_CloseViewDetailsPane { get; set; }
+        public ICommand Command_DeleteSelectedPerson { get; set; }
         #endregion
 
         #region command methods
@@ -83,6 +95,11 @@ namespace MVVM.ViewModels
         {
             this.ShowViewDetailsPane = false;
         }
+
+        void Command_DeleteSelectedPerson_Click()
+        {
+            Person.DeleteSelectedPerson();
+        }
         #endregion
 
         #region methods
@@ -94,6 +111,7 @@ namespace MVVM.ViewModels
             if (Command_CloseAddView == null) Command_CloseAddView = new RelayCommand(Command_CloseAddView_Click);
             if (Command_ShowPersonDetails == null) Command_ShowPersonDetails = new RelayCommand<Model_Person>(Command_ShowPersonDetails_Click);
             if (Command_CloseViewDetailsPane == null) Command_CloseViewDetailsPane = new RelayCommand(Command_CloseViewDetailsPane_Click);
+            if (Command_DeleteSelectedPerson == null) Command_DeleteSelectedPerson = new RelayCommand(Command_DeleteSelectedPerson_Click);
         }
 
         // create an initial persons for our ListView

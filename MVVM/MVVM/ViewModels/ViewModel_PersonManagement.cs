@@ -1,14 +1,14 @@
-﻿using GalaSoft.MvvmLight;
-using MVVM.Models;
+﻿using MVVM.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MVVM.ViewModels
 {
-    public class ViewModel_PersonManagement : ViewModelBase
+    public class ViewModel_PersonManagement : VMBase
     {
         #region events
-
+        public event EventHandler<Model_Person> OnPersonDeleted;
         #endregion
 
         #region vars
@@ -45,11 +45,24 @@ namespace MVVM.ViewModels
         {
             InitCommands();
             DesignData();
+
+            this.Popup.OnOkTapped += Popup_OnOkTapped;
         }
         #endregion
 
         #region command methods
 
+        #endregion
+
+        #region event triggers
+        private void Popup_OnOkTapped(object sender, EventArgs e)
+        {
+            this.PersonCollection.Remove(
+                this.PersonCollection.Where(x => x.FirstName == this.SelectedPerson.FirstName && x.LastName == this.SelectedPerson.LastName).FirstOrDefault()
+                );
+
+            OnPersonDeleted?.Invoke(this, this.SelectedPerson);
+        }
         #endregion
 
         #region methods
@@ -122,6 +135,11 @@ namespace MVVM.ViewModels
             // and clear the fields
             PersonEntry.FirstName = null;
             PersonEntry.LastName = null;
+        }
+
+        public void DeleteSelectedPerson()
+        {
+            this.Popup.ShowPopup($"Are you sure you want to delete {this.SelectedPerson.FirstName} {this.SelectedPerson.LastName}");
         }
         #endregion
     }

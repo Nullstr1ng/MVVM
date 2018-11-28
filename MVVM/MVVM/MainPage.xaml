@@ -45,7 +45,9 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                <Button Text="Add New Person" Command="{Binding Main.Command_ShowAddView}" />
+                <StackLayout>
+                    <Button Text="Add New Person" Command="{Binding Main.Command_ShowAddView}" />
+                </StackLayout>
             </Grid>
         </Grid>
 
@@ -63,7 +65,10 @@
                         <Label Text="{Binding Person.SelectedPerson.LastName}" FontSize="Medium" TextColor="White" />
                     </StackLayout>
 
-                    <Button Text="Close" Command="{Binding Main.Command_CloseViewDetailsPane}" Grid.Row="1" />
+                    <StackLayout Grid.Row="1">
+                        <Button Text="Delete This Person" Command="{Binding Main.Command_DeleteSelectedPerson}" />
+                        <Button Text="Close" Command="{Binding Main.Command_CloseViewDetailsPane}" />
+                    </StackLayout>
                 </Grid>
             </Grid>
         </Grid>
@@ -106,6 +111,31 @@
                                 <Button Text="Close" Grid.Column="2" Command="{Binding Main.Command_CloseAddView}" />
                             </Grid>
                         </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!--popup view-->
+        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Popup.IsVisible}">
+            <Grid BackgroundColor="White" VerticalOptions="Center">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <Label Text="{Binding Popup.Message, FallbackValue='...'}" FontSize="Medium" />
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="Ok" Command="{Binding Popup.Command_Ok}" />
+                        <Button Text="Cancel" Command="{Binding Popup.Command_Cancel}" Grid.Column="2"  />
                     </Grid>
                 </Grid>
             </Grid>
