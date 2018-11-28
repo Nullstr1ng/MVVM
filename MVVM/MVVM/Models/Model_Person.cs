@@ -1,57 +1,28 @@
-﻿using System.ComponentModel;
+﻿using GalaSoft.MvvmLight;
 
 namespace MVVM.Models
 {
-    public class Model_Person : INotifyPropertyChanged
+    public class Model_Person : ViewModelBase
     {
         private string _profilePicture = string.Empty;
         public string ProfilePicture
         {
             get { return _profilePicture; }
-            set
-            {
-                if (_profilePicture != value)
-                {
-                    _profilePicture = value;
-                    RaisePropertyChangedEvent(nameof(ProfilePicture));
-                }
-            }
+            set { Set(nameof(ProfilePicture), ref _profilePicture, value); }
         }
 
         private string _firstName = string.Empty;
         public string FirstName
         {
             get { return _firstName; }
-            set
-            {
-                if (_firstName != value)
-                {
-                    _firstName = value;
-                    RaisePropertyChangedEvent(nameof(FirstName));
-                }
-            }
+            set { Set(nameof(FirstName), ref _firstName, value); }
         }
 
         private string _lastName = string.Empty;
         public string LastName
         {
             get { return _lastName; }
-            set
-            {
-                if (_lastName != value)
-                {
-                    _lastName = value;
-                    RaisePropertyChangedEvent(nameof(LastName));
-                }
-            }
+            set { Set(nameof(LastName), ref _lastName, value); }
         }
-
-        #region INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChangedEvent(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

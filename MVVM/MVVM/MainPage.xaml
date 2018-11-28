@@ -3,14 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MVVM.MainPage"
              
-             xmlns:vm="clr-namespace:MVVM.ViewModels"
+             BindingContext="{Binding Source={StaticResource Locator}}"
              x:Name="thisPage"
              >
-
-    <!--set the BindingContext of this Page to ViewModel_MainPage-->
-    <ContentPage.BindingContext>
-        <vm:ViewModel_MainPage />
-    </ContentPage.BindingContext>
 
     <Grid>
         <Grid>
@@ -20,7 +15,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <ListView ItemsSource="{Binding PersonCollection}" HasUnevenRows="True">
+                <ListView ItemsSource="{Binding Main.PersonCollection}" HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -40,7 +35,7 @@
                                     </Grid>
 
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding BindingContext.Command_ShowPersonDetails, Source={Reference thisPage}}" CommandParameter="{Binding .}" />
+                                        <TapGestureRecognizer Command="{Binding BindingContext.Main.Command_ShowPersonDetails, Source={Reference thisPage}}" CommandParameter="{Binding .}" />
                                     </Grid.GestureRecognizers>
                                 </Grid>
                             </ViewCell>
@@ -50,12 +45,12 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                <Button Text="Add New Person" Command="{Binding Command_ShowAddView}" />
+                <Button Text="Add New Person" Command="{Binding Main.Command_ShowAddView}" />
             </Grid>
         </Grid>
 
         <!--view person popup-->
-        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowViewDetailsPane}">
+        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Main.ShowViewDetailsPane}">
             <Grid BackgroundColor="Accent" HorizontalOptions="End" WidthRequest="300">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -64,17 +59,17 @@
                     </Grid.RowDefinitions>
 
                     <StackLayout Margin="10" Grid.Row="0">
-                        <Label Text="{Binding SelectedPerson.FirstName}" FontSize="Large" TextColor="White" />
-                        <Label Text="{Binding SelectedPerson.LastName}" FontSize="Medium" TextColor="White" />
+                        <Label Text="{Binding Main.SelectedPerson.FirstName}" FontSize="Large" TextColor="White" />
+                        <Label Text="{Binding Main.SelectedPerson.LastName}" FontSize="Medium" TextColor="White" />
                     </StackLayout>
 
-                    <Button Text="Close" Command="{Binding Command_CloseViewDetailsPane}" Grid.Row="1" />
+                    <Button Text="Close" Command="{Binding Main.Command_CloseViewDetailsPane}" Grid.Row="1" />
                 </Grid>
             </Grid>
         </Grid>
 
         <!--add person popup-->
-        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowAddView}">
+        <Grid BackgroundColor="#C0000000" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" IsVisible="{Binding Main.ShowAddView}">
             <Grid VerticalOptions="Center" HorizontalOptions="FillAndExpand" BackgroundColor="Crimson">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
@@ -97,8 +92,8 @@
                             <Label Text="First Name" Grid.Row="0" Grid.Column="0" TextColor="White" />
                             <Label Text="Last Name" Grid.Row="1" Grid.Column="0" TextColor="White" />
 
-                            <Entry Text="{Binding PersonEntry.FirstName}" Grid.Row="0" Grid.Column="1" TextColor="White" />
-                            <Entry Text="{Binding PersonEntry.LastName}" Grid.Row="1" Grid.Column="1" TextColor="White" />
+                            <Entry Text="{Binding Main.PersonEntry.FirstName}" Grid.Row="0" Grid.Column="1" TextColor="White" />
+                            <Entry Text="{Binding Main.PersonEntry.LastName}" Grid.Row="1" Grid.Column="1" TextColor="White" />
 
                             <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                                 <Grid.ColumnDefinitions>
@@ -107,8 +102,8 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Button Text="Save" Grid.Column="0" Command="{Binding Command_Save}" />
-                                <Button Text="Close" Grid.Column="2" Command="{Binding Command_CloseAddView}" />
+                                <Button Text="Save" Grid.Column="0" Command="{Binding Main.Command_Save}" />
+                                <Button Text="Close" Grid.Column="2" Command="{Binding Main.Command_CloseAddView}" />
                             </Grid>
                         </Grid>
                     </Grid>

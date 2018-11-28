@@ -1,13 +1,13 @@
-﻿using MVVM.Helpers;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using MVVM.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace MVVM.ViewModels
 {
-    public class ViewModel_MainPage : INotifyPropertyChanged
+    public class ViewModel_MainPage : ViewModelBase
     {
         #region vars
         Random _r = new Random(DateTime.Now.Second);
@@ -22,11 +22,7 @@ namespace MVVM.ViewModels
         public Model_Person SelectedPerson
         {
             get { return _selectedPerson; }
-            set
-            {
-                _selectedPerson = value;
-                RaisePropertyChangedEvent(nameof(SelectedPerson));
-            }
+            set { Set(nameof(SelectedPerson), ref _selectedPerson, value); }
         }
 
         // holds the data entered in Entry control
@@ -34,11 +30,7 @@ namespace MVVM.ViewModels
         public Model_Person PersonEntry
         {
             get { return _personEntry; }
-            set
-            {
-                _personEntry = value;
-                RaisePropertyChangedEvent(nameof(PersonEntry));
-            }
+            set { Set(nameof(PersonEntry), ref _personEntry, value); }
         }
 
         // show / hides the view for adding a Person
@@ -46,29 +38,15 @@ namespace MVVM.ViewModels
         public bool ShowAddView
         {
             get { return _showAddView; }
-            set
-            {
-                if(_showAddView != value)
-                {
-                    _showAddView = value;
-                    RaisePropertyChangedEvent(nameof(ShowAddView));
-                }
-            }
+            set { Set(nameof(ShowAddView), ref _showAddView, value); }
         }
 
         // show / hides the person details view pane
-        private bool _showViewDetailsPane = false;
+        private bool _ShowViewDetailsPane = false;
         public bool ShowViewDetailsPane
         {
-            get { return _showViewDetailsPane; }
-            set
-            {
-                if(_showViewDetailsPane != value)
-                {
-                    _showViewDetailsPane = value;
-                    RaisePropertyChangedEvent(nameof(ShowViewDetailsPane));
-                }
-            }
+            get { return _ShowViewDetailsPane; }
+            set { Set(nameof(ShowViewDetailsPane), ref _ShowViewDetailsPane, value); }
         }
         #endregion
 
@@ -139,11 +117,11 @@ namespace MVVM.ViewModels
         // Initialize command handlers so we can trigger a specific method tied into that ICommand
         void InitCommands()
         {
-            if (Command_Save == null) Command_Save = new CommandHandler((o) => { Command_Save_Click(); }, true);
-            if (Command_ShowAddView == null) Command_ShowAddView = new CommandHandler((o) => { Command_ShowAddView_Click(); }, true);
-            if (Command_CloseAddView == null) Command_CloseAddView = new CommandHandler((o) => { Command_CloseAddView_Click(); }, true);
-            if (Command_ShowPersonDetails == null) Command_ShowPersonDetails = new CommandHandler((o) => { Command_ShowPersonDetails_Click((Model_Person)o); }, true);
-            if (Command_CloseViewDetailsPane == null) Command_CloseViewDetailsPane = new CommandHandler((o) => { Command_CloseViewDetailsPane_Click(); }, true);
+            if (Command_Save == null) Command_Save = new RelayCommand(Command_Save_Click);
+            if (Command_ShowAddView == null) Command_ShowAddView = new RelayCommand(Command_ShowAddView_Click);
+            if (Command_CloseAddView == null) Command_CloseAddView = new RelayCommand(Command_CloseAddView_Click);
+            if (Command_ShowPersonDetails == null) Command_ShowPersonDetails = new RelayCommand<Model_Person>(Command_ShowPersonDetails_Click);
+            if (Command_CloseViewDetailsPane == null) Command_CloseViewDetailsPane = new RelayCommand(Command_CloseViewDetailsPane_Click);
         }
 
         // create an initial persons for our ListView
@@ -191,14 +169,6 @@ namespace MVVM.ViewModels
                 FirstName = "Michinori",
                 LastName = "Aoyagi"
             });
-        }
-        #endregion
-
-        #region INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChangedEvent(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }
